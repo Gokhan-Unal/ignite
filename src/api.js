@@ -12,4 +12,9 @@ export const popularGamesURL = () => `${baseUrl}${popularGames}`
 export const upcomingGamesURL = () => `${baseUrl}${upcomingGames}`
 export const newGamesURL = () => `${baseUrl}${newGames}`
 
-// console.log(popularGamesURL())
+// GAMEDETAILS
+export const gameDetailsURL = (game_id) => `${baseUrl}games/${game_id}`
+
+// GAMESCREENSHOTS
+export const gameScreenshotURL = (game_id) =>
+  `${baseUrl}games/${game_id}/screenshots`
