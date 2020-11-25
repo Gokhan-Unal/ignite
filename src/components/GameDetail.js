@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useSelector } from 'react-redux'
@@ -12,6 +12,9 @@ import nintendo from '../img/nintendo.svg'
 import apple from '../img/apple.svg'
 import gamepad from '../img/gamepad.svg'
 
+import starEmpty from '../img/star-empty.png'
+import starFull from '../img/star-full.png'
+
 const GameDetail = ({ pathId }) => {
   const history = useHistory()
 
@@ -23,10 +26,26 @@ const GameDetail = ({ pathId }) => {
     }
   }
 
+  // get stars
+
+  const getStars = () => {
+    const stars = []
+    const rating = Math.floor(game.rating)
+    for (let i = 1; i <= 5; i++) {
+      if (i <= rating) {
+        stars.push(<img alt="star" key={i} src={starFull} />)
+      } else {
+        stars.push(<img alt="star" key={i} src={starEmpty} />)
+      }
+    }
+    return stars
+  }
+
   // get platform images
   const getPlatform = (platform) => {
     switch (platform) {
       case 'PlayStation 4':
+      case 'PlayStation 5':
         return playstation
 
       case 'Xbox One':
@@ -58,16 +77,19 @@ const GameDetail = ({ pathId }) => {
               <div className="rating">
                 <motion.h3 layoutId={`title ${pathId}`}>{game.name}</motion.h3>
                 <p>Rating: {game.rating}</p>
+                {getStars()}
               </div>
               <Info>
                 <h3>Platforms</h3>
                 <Platforms>
                   {game.platforms.map((data) => (
-                    <img
-                      key={data.platform.id}
-                      src={getPlatform(data.platform.name)}
-                      alt={data.platform.name}
-                    />
+                    <Fragment key={data.platform.id}>
+                      <img
+                        src={getPlatform(data.platform.name)}
+                        alt={data.platform.name}
+                      />
+                      <small>{data.platform.name}</small>
+                    </Fragment>
                   ))}
                 </Platforms>
               </Info>
@@ -145,6 +167,11 @@ const Stats = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  img {
+    width: 2rem;
+    height: 2rem;
+    display: inline;
+  }
 `
 
 const Info = styled(motion.div)`
@@ -154,10 +181,7 @@ const Info = styled(motion.div)`
 const Platforms = styled(motion.div)`
   display: flex;
   justify-content: space-evenly;
-
-  h3:not(:last-child) {
-    margin-right: 15px;
-  }
+  align-items: center;
 
   img {
     width: 100%;
