@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useDispatch } from 'react-redux'
 import { loadDetail } from '../actions/detailAction'
 
-export const Game = ({ name, released, image, id }) => {
+const Game = ({ name, released, image, id }) => {
   const dispatch = useDispatch()
 
   const loadDetailHandler = () => {
@@ -32,3 +32,4 @@ const StyledGame = styled(motion.div)`
     object-fit: cover;
   }
 `
+export default Game
