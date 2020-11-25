@@ -5,8 +5,16 @@ import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { smallImage } from '../util'
 
-const GameDetail = () => {
+import playstation from '../img/playstation.svg'
+import steam from '../img/steam.svg'
+import xbox from '../img/xbox.svg'
+import nintendo from '../img/nintendo.svg'
+import apple from '../img/apple.svg'
+import gamepad from '../img/gamepad.svg'
+
+const GameDetail = ({ pathId }) => {
   const history = useHistory()
+
   const exitDetailHandler = (e) => {
     const element = e.target
     if (element.classList.contains('shadow')) {
@@ -15,45 +23,81 @@ const GameDetail = () => {
     }
   }
 
+  // get platform images
+  const getPlatform = (platform) => {
+    switch (platform) {
+      case 'PlayStation 4':
+        return playstation
+
+      case 'Xbox One':
+        return xbox
+
+      case 'PC':
+        return steam
+
+      case 'Nintendo Switch':
+        return nintendo
+
+      case 'IOS':
+        return apple
+
+      default:
+        return gamepad
+    }
+  }
+
   // get data from combineReducers
   const { screen, game, isLoading } = useSelector((state) => state.detail)
+
   return (
     <>
       {!isLoading && (
         <CardShadow className="shadow" onClick={exitDetailHandler}>
-          <Detail>
+          <Detail layoutId={pathId}>
             <Stats>
               <div className="rating">
-                <h3>{game.name}</h3>
+                <motion.h3 layoutId={`title ${pathId}`}>{game.name}</motion.h3>
                 <p>Rating: {game.rating}</p>
               </div>
               <Info>
                 <h3>Platforms</h3>
                 <Platforms>
                   {game.platforms.map((data) => (
-                    <h3 key={data.platform.id}>{data.platform.name}</h3>
+                    <img
+                      key={data.platform.id}
+                      src={getPlatform(data.platform.name)}
+                      alt={data.platform.name}
+                    />
                   ))}
                 </Platforms>
               </Info>
             </Stats>
             <Media>
-              <img
+              <motion.img
+                layoutId={`image ${pathId}`}
                 src={smallImage(game.background_image, 1280)}
-                alt={game.name}
+                alt={game.background_image}
               />
             </Media>
+            <Video controls>
+              <source
+                src={Object.values(game.clip.clips.full).join('')}
+                type="video/mp4"
+              />
+              Your browser does not support the video tag.
+            </Video>
             <Description>
               <p>{game.description_raw}</p>
             </Description>
-            <div className="gallery">
+            <Gallery>
               {screen.results.map((screen) => (
                 <img
-                  key={screen.id}
                   src={smallImage(screen.image, 1280)}
-                  alt="Background"
+                  key={screen.id}
+                  alt={screen.image}
                 />
               ))}
-            </div>
+            </Gallery>
           </Detail>
         </CardShadow>
       )}
@@ -67,6 +111,7 @@ const CardShadow = styled(motion.div)`
   overflow-y: scroll;
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
+  z-index: 5;
   top: 0;
   left: 0;
   &::-webkit-scrollbar {
@@ -87,6 +132,7 @@ const Detail = styled(motion.div)`
   padding: 2rem 5rem;
   background: white;
   position: absolute;
+  z-index: 10;
   left: 10%;
   top: 5%;
   color: black;
@@ -108,10 +154,26 @@ const Info = styled(motion.div)`
 const Platforms = styled(motion.div)`
   display: flex;
   justify-content: space-evenly;
+
+  h3:not(:last-child) {
+    margin-right: 15px;
+  }
+
   img {
+    width: 100%;
     margin-left: 3rem;
   }
 `
+const Video = styled.video`
+  width: 100%;
+`
+
+const Gallery = styled.div`
+  img {
+    margin-bottom: 3px;
+  }
+`
+
 const Media = styled(motion.div)`
   margin-top: 5rem;
   img {
