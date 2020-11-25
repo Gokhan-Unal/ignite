@@ -1,8 +1,12 @@
 import { GET_DETAIL } from '../actions/types'
 
 const initialState = {
-  game: {},
-  screen: {},
+  game: {
+    platforms: [],
+  },
+  screen: {
+    results: [],
+  },
 }
 
 const detailReducer = (state = initialState, action) => {
