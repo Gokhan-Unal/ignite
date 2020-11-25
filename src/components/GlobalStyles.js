@@ -43,6 +43,10 @@ const GlobalStyles = createGlobalStyle`
     color: #696969;
   }
 
+  img {
+    display: block;
+  }
+
   a {
     text-decoration: none;
     color: #333;
