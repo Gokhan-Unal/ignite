@@ -47,6 +47,11 @@ const GlobalStyles = createGlobalStyle`
     display: block;
   }
 
+  input {
+    font-weight: bold;
+    font-family: "Montserrat", sans-serif;
+  }
+
   a {
     text-decoration: none;
     color: #333;
