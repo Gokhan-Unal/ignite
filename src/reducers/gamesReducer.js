@@ -1,3 +1,5 @@
+import { CLEAR_SEARCHED, FETCH_GAMES, FETCH_SEARCHED } from '../actions/types'
+
 const initialState = {
   popular: [],
   newGames: [],
@@ -7,12 +9,24 @@ const initialState = {
 
 const gameReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'FETCH_GAMES':
+    case FETCH_GAMES:
       return {
         ...state,
         popular: action.payload.popular,
         upcoming: action.payload.upcoming,
         newGames: action.payload.newGames,
+      }
+
+    case FETCH_SEARCHED:
+      return {
+        ...state,
+        searched: action.payload.searched,
+      }
+
+    case CLEAR_SEARCHED:
+      return {
+        ...state,
+        searched: []
       }
 
     default:

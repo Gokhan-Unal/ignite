@@ -1,19 +1,41 @@
 import { motion } from 'framer-motion'
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { fetchSearch } from '../actions/gamesAction'
+import { CLEAR_SEARCHED } from '../actions/types'
 import logo from '../img/logo.svg'
 
 const Nav = () => {
+  const [textInput, setTextInput] = useState('')
+  const dispatch = useDispatch()
+
+  const inputHandler = (e) => {
+    setTextInput(e.target.value)
+  }
+
+  const submitSearch = (e) => {
+    e.preventDefault()
+    dispatch(fetchSearch(textInput))
+    setTextInput('')
+  }
+
+  const clearSearched = () => {
+    dispatch({ type: CLEAR_SEARCHED })
+  }
+
   return (
     <StyledNav>
-      <Logo>
+      <Logo onClick={clearSearched}>
         <img src={logo} alt="Logo" />
         <h1>Ignite</h1>
       </Logo>
-      <div className="search">
-        <input type="text" />
-        <button>Search</button>
-      </div>
+      <form className="search">
+        <input value={textInput} onChange={inputHandler} type="text" />
+        <button onClick={submitSearch} type="submit">
+          Search
+        </button>
+      </form>
     </StyledNav>
   )
 }
